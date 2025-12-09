@@ -1,5 +1,5 @@
 import 'package:e_learning_application/models/course.dart';
-import 'package:e_learning_application/services.dart/dummy_data_service.dart';
+import 'package:e_learning_application/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
 
 class ActionButtons extends StatelessWidget {

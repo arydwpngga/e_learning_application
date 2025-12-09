@@ -1,5 +1,5 @@
 import 'package:e_learning_application/models/category.dart';
-import 'package:e_learning_application/services.dart/dummy_data_service.dart';
+import 'package:e_learning_application/services/dummy_data_service.dart';
 import 'package:e_learning_application/views/home/widgets/category_section.dart';
 import 'package:e_learning_application/views/home/widgets/home_app_bar.dart';
 import 'package:e_learning_application/views/home/widgets/in_progress_section.dart';

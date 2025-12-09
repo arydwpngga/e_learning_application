@@ -4,7 +4,7 @@ import 'package:e_learning_application/bloc/font/font_state.dart';
 import 'package:e_learning_application/core/theme/app_theme.dart';
 import 'package:e_learning_application/routes/app_routes.dart';
 import 'package:e_learning_application/routes/route_pages.dart';
-import 'package:e_learning_application/services.dart/storage_service.dart';
+import 'package:e_learning_application/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

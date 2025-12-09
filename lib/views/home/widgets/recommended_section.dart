@@ -1,4 +1,4 @@
-import 'package:e_learning_application/services.dart/dummy_data_service.dart';
+import 'package:e_learning_application/services/dummy_data_service.dart';
 import 'package:e_learning_application/views/home/widgets/recommended_course_card.dart';
 import 'package:flutter/material.dart';
 

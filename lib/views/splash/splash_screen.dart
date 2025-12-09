@@ -1,6 +1,6 @@
 import 'package:e_learning_application/bloc/auth/auth_bloc.dart';
 import 'package:e_learning_application/routes/app_routes.dart';
-import 'package:e_learning_application/services.dart/storage_service.dart';
+import 'package:e_learning_application/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_core/src/get_main.dart';

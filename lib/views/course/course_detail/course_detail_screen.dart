@@ -1,5 +1,5 @@
 import 'package:e_learning_application/core/theme/app_colors.dart';
-import 'package:e_learning_application/services.dart/dummy_data_service.dart';
+import 'package:e_learning_application/services/dummy_data_service.dart';
 import 'package:e_learning_application/views/course/course_detail/widgets/action_buttons.dart';
 import 'package:e_learning_application/views/course/course_detail/widgets/course_detail_app_bar.dart';
 import 'package:e_learning_application/views/course/course_detail/widgets/course_info_card.dart';

@@ -1,7 +1,7 @@
 import 'package:e_learning_application/core/theme/app_colors.dart';
 import 'package:e_learning_application/models/onboarding_item.dart';
 import 'package:e_learning_application/routes/app_routes.dart';
-import 'package:e_learning_application/services.dart/storage_service.dart';
+import 'package:e_learning_application/services/storage_service.dart';
 import 'package:e_learning_application/views/onboarding/widgets/onboarding_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';

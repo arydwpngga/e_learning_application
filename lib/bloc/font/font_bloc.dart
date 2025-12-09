@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:e_learning_application/bloc/font/font_event.dart';
 import 'package:e_learning_application/bloc/font/font_state.dart';
-import 'package:e_learning_application/services.dart/font_service.dart';
+import 'package:e_learning_application/services/font_service.dart';
 import 'package:get_storage/get_storage.dart';
 
 class FontBloc extends Bloc<FontEvent, FontState> {

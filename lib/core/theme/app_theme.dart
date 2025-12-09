@@ -1,7 +1,7 @@
 import 'package:e_learning_application/bloc/font/font_state.dart';
 import 'package:e_learning_application/core/theme/app_colors.dart';
 import 'package:e_learning_application/core/theme/app_typography.dart';
-import 'package:e_learning_application/services.dart/font_service.dart';
+import 'package:e_learning_application/services/font_service.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
