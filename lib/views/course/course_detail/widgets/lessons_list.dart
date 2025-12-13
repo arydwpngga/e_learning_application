@@ -1,4 +1,5 @@
 import 'package:e_learning_application/core/theme/app_colors.dart';
+import 'package:e_learning_application/routes/app_routes.dart';
 import 'package:e_learning_application/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,23 +43,33 @@ class LessonsList extends StatelessWidget {
           isUnlocked: isUnlocked,
           onTap: () async {
             if (course.isPremium && !isUnlocked) {
-              Get.snackbar(
-                'Premium Course',
-                'Please purchase this course to access all lessons',
-                backgroundColor: AppColors.primary,
-                colorText: Colors.white,
-                duration: const Duration(seconds: 3),
+              Get.showSnackbar(
+                const GetSnackBar(
+                  title: 'Premium Course',
+                  message: 'Please purchase this course to access all lessons',
+                  backgroundColor: AppColors.primary,
+                  duration: Duration(seconds: 3),
+                ),
               );
             } else if (isLocked) {
-              Get.snackbar(
-                'Lesson Locked',
-                'Please complete the previous lesson first',
-                backgroundColor: Colors.red,
-                colorText: Colors.white,
-                duration: Duration(seconds: 3),
+              Get.showSnackbar(
+                const GetSnackBar(
+                  title: 'Lesson Locked',
+                  message: 'Please complete the previous lesson first',
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                ),
               );
             } else {
               // navigate to lesson screen
+              final result = await Get.toNamed(
+                AppRoutes.lesson.replaceAll(':id', lesson.id),
+                parameters: {'courseId': courseId},
+              );
+
+              if (result == true) {
+                onLessonComplete?.call();
+              }
             }
           },
         );

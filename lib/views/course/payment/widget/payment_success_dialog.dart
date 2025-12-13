@@ -36,6 +36,7 @@ class PaymentSuccessDialog extends StatelessWidget {
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
+              height: 56,
               child: CustomButton(
                 text: 'Start Learning',
                 onPressed: () {
@@ -44,7 +45,6 @@ class PaymentSuccessDialog extends StatelessWidget {
                   // navigate to content progress
                 },
               ),
-              height: 56,
             ),
           ],
         ),
