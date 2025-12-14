@@ -16,7 +16,7 @@ class CertificateDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Congratulations!'),
+      title: Text('Congratulations!'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -27,7 +27,7 @@ class CertificateDialog extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'You can now download your certificate of completion',
             textAlign: TextAlign.center,
             style: TextStyle(color: AppColors.secondary),
@@ -48,7 +48,7 @@ class CertificateDialog extends StatelessWidget {
                     vertical: 12,
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Later',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
@@ -61,15 +61,14 @@ class CertificateDialog extends StatelessWidget {
                   onDownload();
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 12,
-                  ),
-                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12,), backgroundColor: AppColors.primary,
                 ),
-                child: Text(
+                child:  const Text(
                   'Later',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],

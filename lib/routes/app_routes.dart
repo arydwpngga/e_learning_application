@@ -64,10 +64,13 @@ class AppRoutes {
                 : null,
           ),
         );
+
       case home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+
       case teacherHome:
         return MaterialPageRoute(builder: (_) => const TeacherHomeScreen());
+
       case courseList:
         final args = setting.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
@@ -76,6 +79,7 @@ class AppRoutes {
             categoryName: args?['categoryName'] as String?,
           ),
         );
+
       case courseDetail:
         String courseId;
         if (setting.arguments != null) {
@@ -87,15 +91,21 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => CourseDetailScreen(courseId: courseId),
         );
+
       case quizList:
         return MaterialPageRoute(builder: (_) => const QuizListScreen());
+
       case lesson:
         final lessonId = setting.arguments as String?;
         return MaterialPageRoute(
-          builder: (_) => LessonScreen(lessonId: lessonId ?? ''),
+          builder: (_) => LessonScreen(
+            lessonId: lessonId ?? '',
+          ),
         );
+
       case profile:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
+
       case payment:
         final args = setting.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
@@ -105,6 +115,7 @@ class AppRoutes {
             price: args['price'] ?? 0.0,
           ),
         );
+
       default:
         return MaterialPageRoute(
           builder: (_) =>

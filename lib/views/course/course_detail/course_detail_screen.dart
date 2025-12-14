@@ -22,11 +22,12 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final lastLesson = Get.parameters['lastLesson'];
-    final id = Get.parameters['id'] ?? widget.courseId;
-    final course = DummyDataService.getCourseById(id);
-    final isCompleted = DummyDataService.isCourseCompleted(course.id);
-    final isUnlocked = DummyDataService.isCourseUnlocked(widget.courseId);
+
+    final courseId = Get.parameters['id'] ?? widget.courseId;
+    final course = DummyDataService.getCourseById(courseId);
+
+    final isUnlocked = DummyDataService.isCourseUnlocked(courseId);
+    final isCompleted = DummyDataService.isCourseCompleted(courseId);
 
     return Scaffold(
       body: CustomScrollView(
@@ -34,7 +35,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           CourseDetailAppBar(imageUrl: course.imageUrl),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -52,9 +53,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       const SizedBox(width: 4),
                       Text(
                         course.rating.toString(),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black,
-                        ),
+                        style: theme.textTheme.bodyMedium,
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -74,12 +73,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    course.description,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
+                  Text(course.description, style: theme.textTheme.bodyLarge),
                   const SizedBox(height: 16),
                   CourseInfoCard(course: course),
                   const SizedBox(height: 24),
@@ -87,15 +81,20 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     'Course Content',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
                     ),
                   ),
+
+                  /// 🔥 INI KUNCI UTAMANYA
                   LessonsList(
-                    courseId: widget.courseId,
+                    courseId: courseId,
                     isUnlocked: isUnlocked,
-                    onLessonComplete: () => setState(() {}),
+                    onLessonComplete: () {
+                      setState(() {});
+                    },
                   ),
-                  ReviewsSection(courseId: widget.courseId),
+
+                  const SizedBox(height: 24),
+                  ReviewsSection(courseId: courseId),
                   ActionButtons(course: course),
                 ],
               ),
@@ -118,11 +117,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  // navigate to payment screen
                   Get.toNamed(
                     AppRoutes.payment,
                     arguments: {
-                      'courseId': widget.courseId,
+                      'courseId': courseId,
                       'courseName': course.title,
                       'price': course.price,
                     },
@@ -132,7 +130,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                   backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.all(16),
                 ),
-                child: Text(('Buy Now for \$${course.price}')),
+                child: Text('Buy Now for \$${course.price}'),
               ),
             )
           : null,

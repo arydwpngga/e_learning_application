@@ -43,15 +43,19 @@ class AppPages {
         categoryName: Get.arguments?['categoryName'] as String?,
       ),
     ),
+
     GetPage(
       name: '/course/:id',
       page: () => CourseDetailScreen(courseId: Get.parameters['id'] ?? ''),
     ),
+
     GetPage(name: AppRoutes.quizList, page: () => const QuizListScreen()),
+
     GetPage(
       name: AppRoutes.lesson,
       page: () => LessonScreen(lessonId: Get.parameters['id'] ?? ''),
     ),
+
     GetPage(
       name: AppRoutes.payment,
       page: () => PaymentScreen(
@@ -60,6 +64,7 @@ class AppPages {
         price: Get.arguments['price'] as double,
       ),
     ),
+    
     GetPage(name: AppRoutes.profile, page: () => const ProfileScreen()),
     GetPage(name: AppRoutes.teacherHome, page: () => const TeacherHomeScreen()),
   ];

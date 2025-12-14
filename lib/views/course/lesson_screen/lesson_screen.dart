@@ -18,29 +18,47 @@ class LessonScreen extends StatefulWidget {
 }
 
 class _LessonScreenState extends State<LessonScreen> {
-  LessonVideoController? _videoController;
+  late final LessonVideoController _videoController;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
 
-    final courseId = Get.parameters['courseId'];
-    if (courseId == null) return;
-
     _videoController = LessonVideoController(
       lessonId: widget.lessonId,
       onLoadingChanged: (loading) {
-        if (mounted) setState(() => _isLoading = loading);
+        setState(() => _isLoading = loading);
+      },
+      onCertificateEarned: (course) {
+        if (mounted) _showCertificateDialog(context, course);
+      },
+      onVideoCompleted: () async {
+        debugPrint('VIDEO COMPLETED CALLBACK FIRED');
+
+        Get.snackbar(
+          'Lesson Completed',
+          'You can proceed to the next lesson',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+
+        await Future.delayed(const Duration(seconds: 2));
+
+        if (mounted) {
+          Get.back(result: true);
+        }
       },
     );
 
-    _videoController!.initializeVideo(courseId: courseId);
+    _videoController.initializeVideo();
   }
 
   @override
   void dispose() {
-    _videoController?.dispose();
+    _videoController.dispose();
     super.dispose();
   }
 
@@ -57,11 +75,9 @@ class _LessonScreenState extends State<LessonScreen> {
   }
 
   void _downloadCertificate(Course course) {
-    // here you would implement the actual certificate generation and download
-    // For now, we'll just show a success message
     Get.snackbar(
-      'Certification Ready',
-      'Your certificate for ${course.title} has been generated',
+      'Certificate Ready!',
+      "Your certificate for ${course.title} has been generated",
       backgroundColor: AppColors.primary,
       colorText: Colors.white,
       duration: const Duration(seconds: 5),
@@ -72,17 +88,22 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final courseId = Get.parameters['courseId'];
+    final course = courseId != null
+        ? DummyDataService.getCourseById(courseId)
+        : null;
+    final isUnlocked = courseId != null
+        ? DummyDataService.isCourseUnlocked(courseId)
+        : false;
 
-    if (courseId == null) {
-      return const Scaffold(body: Center(child: Text('Invalid course')));
+    if (course == null) {
+      return const Scaffold(body: Center(child: Text('Course not Found')));
     }
 
-    final course = DummyDataService.getCourseById(courseId);
-    final isUnlocked = DummyDataService.isCourseUnlocked(courseId);
-
     if (course.isPremium && !isUnlocked) {
-      return const Scaffold(
-        body: Center(child: Text('Please purchase this course')),
+      return Scaffold(
+        body: Center(
+          child: Text("Please purchase this course to access the content"),
+        ),
       );
     }
 
@@ -90,17 +111,22 @@ class _LessonScreenState extends State<LessonScreen> {
       (l) => l.id == widget.lessonId,
       orElse: () => course.lessons.first,
     );
-
     return Scaffold(
       body: Column(
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
             child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : (_videoController?.chewieController != null
-                      ? Chewie(controller: _videoController!.chewieController!)
-                      : const Center(child: Text('Error loading video'))),
+                ? Container(
+                    color: theme.colorScheme.surface,
+                    child: const Center(child: CircularProgressIndicator()),
+                  )
+                : _videoController.chewieController != null
+                ? Chewie(controller: _videoController.chewieController!)
+                : Container(
+                    color: theme.colorScheme.surface,
+                    child: const Center(child: Text('Error loading video')),
+                  ),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -135,8 +161,8 @@ class _LessonScreenState extends State<LessonScreen> {
                   Text(
                     'Description',
                     style: theme.textTheme.titleLarge?.copyWith(
+                      color: AppColors.secondaryDark,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -150,8 +176,8 @@ class _LessonScreenState extends State<LessonScreen> {
                   Text(
                     'Resources',
                     style: theme.textTheme.titleLarge?.copyWith(
+                      color: AppColors.secondaryDark,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -159,9 +185,7 @@ class _LessonScreenState extends State<LessonScreen> {
                     (resource) => ResourceTile(
                       title: resource.title,
                       icon: _getIconForResourceType(resource.type),
-                      onTap: () {
-                        // TODO: Implement resource download
-                      },
+                      onTap: () {},
                     ),
                   ),
                 ],
@@ -173,7 +197,7 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
-  _getIconForResourceType(String type) {
+  IconData _getIconForResourceType(String type) {
     switch (type.toLowerCase()) {
       case 'pdf':
         return Icons.picture_as_pdf;

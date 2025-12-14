@@ -3,7 +3,6 @@ import 'package:e_learning_application/routes/app_routes.dart';
 import 'package:e_learning_application/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'lesson_tile.dart';
 
 class LessonsList extends StatelessWidget {
@@ -28,48 +27,53 @@ class LessonsList extends StatelessWidget {
       itemCount: course.lessons.length,
       itemBuilder: (context, index) {
         final lesson = course.lessons[index];
+
         final isLocked =
             !lesson.isPreview &&
-            (index > 0 &&
-                !DummyDataService.isLessonCompleted(
-                  courseId,
-                  course.lessons[index - 1].id,
-                ));
+            index > 0 &&
+            !DummyDataService.isLessonCompleted(
+              courseId,
+              course.lessons[index - 1].id,
+            );
+
         return LessonTile(
           title: lesson.title,
           duration: '${lesson.duration} min',
-          isCompleted: DummyDataService.isLessonCompleted(course.id, lesson.id),
+          isCompleted: DummyDataService.isLessonCompleted(courseId, lesson.id),
           isLocked: isLocked,
           isUnlocked: isUnlocked,
           onTap: () async {
             if (course.isPremium && !isUnlocked) {
-              Get.showSnackbar(
-                const GetSnackBar(
-                  title: 'Premium Course',
-                  message: 'Please purchase this course to access all lessons',
-                  backgroundColor: AppColors.primary,
-                  duration: Duration(seconds: 3),
-                ),
+              Get.snackbar(
+                'Premium Course',
+                'Please purchase this course to access all lessons',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: AppColors.primary,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 2),
               );
-            } else if (isLocked) {
-              Get.showSnackbar(
-                const GetSnackBar(
-                  title: 'Lesson Locked',
-                  message: 'Please complete the previous lesson first',
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                ),
-              );
-            } else {
-              // navigate to lesson screen
-              final result = await Get.toNamed(
-                AppRoutes.lesson.replaceAll(':id', lesson.id),
-                parameters: {'courseId': courseId},
-              );
+              return;
+            }
 
-              if (result == true) {
-                onLessonComplete?.call();
-              }
+            if (isLocked) {
+              Get.snackbar(
+                'Lesson Locked',
+                'Please complete the previous lesson first',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 2),
+              );
+              return;
+            }
+
+            final result = await Get.toNamed(
+              AppRoutes.lesson.replaceAll(':id', lesson.id),
+              parameters: {'courseId': courseId},
+            );
+
+            if (result == true) {
+              onLessonComplete?.call();
             }
           },
         );
