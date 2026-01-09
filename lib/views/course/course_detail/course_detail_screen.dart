@@ -6,6 +6,7 @@ import 'package:e_learning_application/views/course/course_detail/widgets/course
 import 'package:e_learning_application/views/course/course_detail/widgets/course_info_card.dart';
 import 'package:e_learning_application/views/course/course_detail/widgets/lessons_list.dart';
 import 'package:e_learning_application/views/course/course_detail/widgets/reviews_section.dart';
+import 'package:e_learning_application/views/course/lesson_screen/lesson_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +20,8 @@ class CourseDetailScreen extends StatefulWidget {
 }
 
 class _CourseDetailScreenState extends State<CourseDetailScreen> {
+  String? _activeLessonId;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -53,7 +56,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       const SizedBox(width: 4),
                       Text(
                         course.rating.toString(),
-                        style: theme.textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -72,8 +77,13 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(course.description, style: theme.textTheme.bodyLarge),
+                  const SizedBox(height: 8),
+                  Text(
+                    course.description,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: AppColors.secondary,
+                    ),
+                  ),
                   const SizedBox(height: 16),
                   CourseInfoCard(course: course),
                   const SizedBox(height: 24),
@@ -81,19 +91,33 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     'Course Content',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
                     ),
                   ),
-
-                  /// 🔥 INI KUNCI UTAMANYA
                   LessonsList(
                     courseId: courseId,
                     isUnlocked: isUnlocked,
-                    onLessonComplete: () {
+                    activeLessonId: _activeLessonId,
+                    onLessonTap: (lessonId) async {
+                      setState(() {
+                        _activeLessonId = lessonId;
+                      });
+
+                      final result = await Get.toNamed(
+                        AppRoutes.lesson.replaceAll(':id', lessonId),
+                        parameters: {'courseId': courseId},
+                      );
+
+                      if (result is String) {
+                        setState(() {
+                          _activeLessonId = result;
+                        });
+                      }
                       setState(() {});
                     },
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   ReviewsSection(courseId: courseId),
                   ActionButtons(course: course),
                 ],

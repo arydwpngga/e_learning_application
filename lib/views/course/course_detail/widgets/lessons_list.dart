@@ -8,18 +8,27 @@ import 'lesson_tile.dart';
 class LessonsList extends StatelessWidget {
   final String courseId;
   final bool isUnlocked;
-  final VoidCallback? onLessonComplete;
+  final String? activeLessonId;
+  final Function(String lessonId) onLessonTap;
 
   const LessonsList({
     super.key,
     required this.courseId,
     required this.isUnlocked,
-    this.onLessonComplete,
+    required this.activeLessonId,
+    required this.onLessonTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final course = DummyDataService.getCourseById(courseId);
+
+    // Fallback aktif yang MASUK AKAL (bukan reset sembarang)
+    final resolvedActiveLessonId = activeLessonId ??
+        course.lessons.firstWhere(
+          (l) => !DummyDataService.isLessonCompleted(courseId, l.id),
+          orElse: () => course.lessons.first,
+        ).id;
 
     return ListView.builder(
       shrinkWrap: true,
@@ -36,13 +45,17 @@ class LessonsList extends StatelessWidget {
               course.lessons[index - 1].id,
             );
 
+        final isActive = lesson.id == resolvedActiveLessonId;
+
         return LessonTile(
           title: lesson.title,
           duration: '${lesson.duration} min',
-          isCompleted: DummyDataService.isLessonCompleted(courseId, lesson.id),
+          isCompleted:
+              DummyDataService.isLessonCompleted(courseId, lesson.id),
           isLocked: isLocked,
           isUnlocked: isUnlocked,
-          onTap: () async {
+          isActive: isActive,
+          onTap: () {
             if (course.isPremium && !isUnlocked) {
               Get.snackbar(
                 'Premium Course',
@@ -50,7 +63,6 @@ class LessonsList extends StatelessWidget {
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: AppColors.primary,
                 colorText: Colors.white,
-                duration: const Duration(seconds: 2),
               );
               return;
             }
@@ -62,19 +74,11 @@ class LessonsList extends StatelessWidget {
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: Colors.red,
                 colorText: Colors.white,
-                duration: const Duration(seconds: 2),
               );
               return;
             }
 
-            final result = await Get.toNamed(
-              AppRoutes.lesson.replaceAll(':id', lesson.id),
-              parameters: {'courseId': courseId},
-            );
-
-            if (result == true) {
-              onLessonComplete?.call();
-            }
+            onLessonTap(lesson.id);
           },
         );
       },

@@ -385,7 +385,7 @@ class DummyDataService {
       duration: 30,
       resources: _createDummyResources(),
       isPreview: isPreview,
-      isLocked: isPreview,
+      isLocked: !isPreview,
       isComplete: isComplete,
     );
   }

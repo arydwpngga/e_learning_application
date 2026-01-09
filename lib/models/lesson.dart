@@ -65,7 +65,7 @@ class Lesson {
     'duration': duration,
     'resources': resources.map((resources) => resources.toJson()).toList(),
     'isPreview': isPreview,
-    'isLocked': isPreview,
+    'isLocked': isLocked,
     'isComplete': isComplete,
   };
 

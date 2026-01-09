@@ -10,6 +10,7 @@ import 'package:e_learning_application/views/course/payment/payment_screen.dart'
 import 'package:e_learning_application/views/home/home_screen.dart';
 import 'package:e_learning_application/views/onboarding/onboarding_screen.dart';
 import 'package:e_learning_application/views/profile/profile_screen.dart';
+import 'package:e_learning_application/views/quiz/quiz_attempt/quiz_attempt_screen.dart';
 import 'package:e_learning_application/views/quiz/quiz_list/quiz_list_screen.dart';
 import 'package:e_learning_application/views/splash/splash_screen.dart';
 import 'package:e_learning_application/views/teacher/teacher_home_screen.dart';
@@ -52,6 +53,11 @@ class AppPages {
     GetPage(name: AppRoutes.quizList, page: () => const QuizListScreen()),
 
     GetPage(
+      name: '/quiz/:id',
+      page: () => QuizAttemptScreen(quizId: Get.parameters['id'] ?? ''),
+    ),
+
+    GetPage(
       name: AppRoutes.lesson,
       page: () => LessonScreen(lessonId: Get.parameters['id'] ?? ''),
     ),
@@ -64,7 +70,7 @@ class AppPages {
         price: Get.arguments['price'] as double,
       ),
     ),
-    
+
     GetPage(name: AppRoutes.profile, page: () => const ProfileScreen()),
     GetPage(name: AppRoutes.teacherHome, page: () => const TeacherHomeScreen()),
   ];
